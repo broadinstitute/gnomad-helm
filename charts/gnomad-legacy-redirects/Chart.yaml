@@ -21,4 +21,8 @@ version: 0.0.1
 # incremented each time you make changes to the application. Versions are not expected to
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
-appVersion: "0200252"
+appVersion: "75636d6"
+
+maintainers:
+  - name: broadinstitute/gnomad-browser
+    url: https://gnomad.broadinstitute.org
