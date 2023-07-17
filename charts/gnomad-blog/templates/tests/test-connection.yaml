@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "gnomad-blog.fullname" . }}-test-connection"
+  labels:
+    {{- include "gnomad-blog.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: curl
+      image: curlimages:latest
+      command: ['curl']
+      args: ['{{ include "gnomad-blog.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
