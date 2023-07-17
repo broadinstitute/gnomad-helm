@@ -6,4 +6,4 @@ metadata:
     {{- include "gnomad-legacy-redirects.labels" . | nindent 4 }}
 data:
   # property-like keys; each key maps to a simple value
-  ip: {{ .Values.gcp_global_ip }}
+  ip: {{ .Values.gcp_global_ip.address }}
