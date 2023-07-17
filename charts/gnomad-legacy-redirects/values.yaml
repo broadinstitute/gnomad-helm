@@ -23,23 +23,11 @@ service:
 gcp_global_ip: "0.0.0.0"
 
 ingress:
-  enabled: false
-
-# Example ingress
-# ingress:
-#   enabled: true
-#   className: ""
-#   annotations:
-#     kubernetes.io/ingress.global-static-ip-name: prod-legacy-redirects-ip
-#   hosts:
-#     - host: exac.broadinstitute.org
-#       paths:
-#         - path: /
-#           pathType: ImplementationSpecific
-#   tls: []
-#  - secretName: chart-example-tls
-#    hosts:
-#      - chart-example.local
+  enabled: true
+  host: exac.broadinstitute.org
+  paths:
+    - path: /*
+      pathType: ImplementationSpecific
 
 resources:
   requests:
