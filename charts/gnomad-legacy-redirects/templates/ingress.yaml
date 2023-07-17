@@ -27,7 +27,7 @@ spec:
               service:
                 name: {{ $fullName }}
                 port:
-                  number: {{ .Values.service.port }}
+                  number: {{ $.Values.service.port }}
           {{- end }}
 {{- if .Values.ingress.managed_cert }}
 ---
