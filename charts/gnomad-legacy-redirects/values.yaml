@@ -25,9 +25,6 @@ gcp_global_ip:
 
 ingress:
   enabled: true
-  host: exac.broadinstitute.org
-  path: /*
-  pathType: ImplementationSpecific
 
 resources:
   requests:
@@ -38,8 +35,7 @@ resources:
     memory: 32Mi
 
 nodeSelector:
-  {}
-  # cloud.google.com/gke-nodepool: main-pool
+  cloud.google.com/gke-nodepool: main-pool
 
 affinity: {}
 
