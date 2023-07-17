@@ -9,7 +9,7 @@ metadata:
 spec:
   containers:
     - name: curl
-      image: curlimages:latest
+      image: curlimages/curl:latest
       command: ['curl']
-      args: ['{{ include "gnomad-blog.fullname" . }}:{{ .Values.service.port }}']
+      args: ['-L', '--fail-with-body', '{{ include "gnomad-blog.fullname" . }}:{{ .Values.service.port }}/news']
   restartPolicy: Never

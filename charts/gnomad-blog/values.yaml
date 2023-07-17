@@ -35,3 +35,4 @@ nodeSelector: {}
 
 secrets_cluster_secretstore_name: gcpsm
 gcp_blog_oauth_secrets_name: blog-oauth-secrets
+proxy_ips: "127.0.0.1,0.0.0.0"

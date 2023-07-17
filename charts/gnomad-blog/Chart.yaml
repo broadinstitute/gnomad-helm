@@ -22,3 +22,13 @@ version: 0.0.1
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
 appVersion: "bff889b8"
+
+sources:
+  - https://github.com/broadinstitute/gnomad-helm
+  - https://github.com/broadinstitute/gnomad-blog
+
+home: "https://gnomad.broadinstitute.org"
+
+maintainers:
+  - name: broadinstitute/gnomad-browser
+    url: https://gnomad.broadinstitute.org
