@@ -1,0 +1,25 @@
+{{ template "chart.header" . }}
+{{ template "chart.deprecationWarning" . }}
+
+{{ template "chart.badgesSection" . }}
+
+{{ template "chart.description" . }}
+
+{{ template "chart.homepageLine" . }}
+
+{{ template "chart.maintainersSection" . }}
+
+{{ template "chart.sourcesSection" . }}
+
+{{ template "chart.requirementsSection" . }}
+
+## Installation
+
+1. `helm repo add gnomad broadinstitute.github.io/gnomad-helm`
+2. `helm install --set 'ingress.managed_cert=true' --set 'gcp_global_ip=1.2.3.4' gnomad-legacy-redirects gnomad/gnomad-legacy-redirects`
+
+## Customization
+
+The deployment can be customized by overriding the defaults in values.yaml using any of the methods described in the [`helm install` docs](https://helm.sh/docs/helm/helm_install/)
+
+{{ template "chart.valuesSection" . }}

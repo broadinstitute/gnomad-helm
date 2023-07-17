@@ -8,8 +8,10 @@ metadata:
   labels:
     {{- include "gnomad-legacy-redirects.labels" . | nindent 4 }}
   annotations:
-    ingress.gcp.kubernetes.io/managed-certificates: {{ include "gnomad-legacy-redirects.fullname" . }}
-    networking.gke.io/v1beta1.FrontendConfig: {{ include "gnomad-legacy-redirects.fullname" . }}
+  {{- if .Values.ingress.managed_cert }}
+    ingress.gcp.kubernetes.io/managed-certificates: {{ $fullName }}
+    networking.gke.io/v1beta1.FrontendConfig: {{ $fullName }}
+  {{- end }}
   {{- with .Values.ingress.annotations }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
@@ -27,11 +29,12 @@ spec:
                 port:
                   number: {{ $svcPort }}
           {{- end }}
+{{- if .Values.ingress.managed_cert }}
 ---
 apiVersion: networking.gke.io/v1beta1
 kind: FrontendConfig
 metadata:
-  name: {{ include "gnomad-legacy-redirects.fullname" . }}
+  name: {{ $fullName }}
 spec:
   redirectToHttps:
     enabled: true
@@ -39,8 +42,9 @@ spec:
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
-  name: {{ include "gnomad-legacy-redirects.fullname" . }}
+  name: {{ $fullName }}
 spec:
   domains:
     - {{ .Values.ingress.host | quote}}
+{{- end }}
 {{- end }}

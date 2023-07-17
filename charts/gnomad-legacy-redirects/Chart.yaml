@@ -23,6 +23,12 @@ version: 0.0.1
 # It is recommended to use it with quotes.
 appVersion: "75636d6"
 
+sources:
+  - https://github.com/broadinstitute/gnomad-helm
+  - https://github.com/broadinstitute/gnomad-redirect
+
+home: "https://gnomad.broadinstitute.org"
+
 maintainers:
   - name: broadinstitute/gnomad-browser
     url: https://gnomad.broadinstitute.org

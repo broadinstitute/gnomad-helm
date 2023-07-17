@@ -25,6 +25,8 @@ gcp_global_ip: "0.0.0.0"
 ingress:
   enabled: true
   host: exac.broadinstitute.org
+  # managed_cert defaults to false to ease testing. Set to true for prod deployments
+  managed_cert: false
   paths:
     - path: /*
       pathType: ImplementationSpecific
