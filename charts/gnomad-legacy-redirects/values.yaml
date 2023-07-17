@@ -7,8 +7,6 @@ fullnameOverride: ""
 
 replicaCount: 1
 
-imagePullSecrets: []
-
 podAnnotations: {}
 
 image:
@@ -28,9 +26,8 @@ gcp_global_ip:
 ingress:
   enabled: true
   host: exac.broadinstitute.org
-  paths:
-    - path: /*
-      pathType: ImplementationSpecific
+  path: /*
+  pathType: ImplementationSpecific
 
 resources:
   requests:
