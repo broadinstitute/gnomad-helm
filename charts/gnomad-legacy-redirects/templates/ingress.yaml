@@ -26,7 +26,7 @@ spec:
               service:
                 name: {{ $fullName }}
                 port:
-                  number: {{ $.Values.service.port }}
+                  number: {{ .Values.service.port }}
 {{- if eq .Values.integration_test false }}
 ---
 apiVersion: networking.gke.io/v1beta1
