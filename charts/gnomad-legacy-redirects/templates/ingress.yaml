@@ -7,7 +7,7 @@ metadata:
   labels:
     {{- include "gnomad-legacy-redirects.labels" . | nindent 4 }}
   annotations:
-  {{- if .Values.ingress.managed_cert }}
+  {{- if eq .Values.integration_test false }}
     ingress.gcp.kubernetes.io/managed-certificates: {{ $fullName }}
     networking.gke.io/v1beta1.FrontendConfig: {{ $fullName }}
     kubernetes.io/ingress.global-static-ip-name: {{ .Values.gcp_global_ip.name }}
@@ -29,7 +29,7 @@ spec:
                 port:
                   number: {{ $.Values.service.port }}
           {{- end }}
-{{- if .Values.ingress.managed_cert }}
+{{- if eq .Values.integration_test false }}
 ---
 apiVersion: networking.gke.io/v1beta1
 kind: FrontendConfig

@@ -36,5 +36,6 @@ kind create cluster
 # For private GCR registries, authenticate using an access token, using the kind-gcr.sh script: https://kind.sigs.k8s.io/docs/user/private-registries/#use-an-access-token
 ./kind-gcr.sh
 # run ct from the root of the git repo to test any helm charts that have changed in your current branch, relevant to main
-ct lint-and-install --target-branch main
+ct lint-and-install # for integration test
+ct lint # for just linting
 ```
