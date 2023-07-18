@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "gnomad-legacy-redirects.fullname" . }}
+  labels:
+    {{- include "gnomad-legacy-redirects.labels" . | nindent 4 }}
+data:
+  # property-like keys; each key maps to a simple value
+  ip: {{ .Values.gcp_global_ip.address }}

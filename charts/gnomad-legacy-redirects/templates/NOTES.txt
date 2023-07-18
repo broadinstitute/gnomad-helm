@@ -1,0 +1,10 @@
+{{- if .Values.ingress.enabled }}
+The legacy redirects service is deployed at:
+  https://{{ .Values.ingress.host }}
+{{- end }}
+
+The helm release is named {{ .Release.Name }}.
+
+To learn more about the release, try:
+
+  $ helm status {{ .Release.Name }}
