@@ -26,10 +26,11 @@ jobs:
         id: new-chart-vers
         run: |
           set -eo pipefail
-          curl -L -O https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.4.0/src/semver
-          echo "1ff4a97e4d1e389f6f034f7464ac4365f1be2d900e2dc2121e24a6dc239e8992 semver" | sha256sum --check
-          chmod +x ./semver
-          NEWVER=$(semver bump patch $(grep 'version:' charts/${{ github.event.client_payload.chart_name }}/Chart.yaml | awk -F' ' '{print $2}'))
+          curl -L https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.4.0/src/semver -o /usr/local/bin/semver
+          cd /opt
+          echo "1ff4a97e4d1e389f6f034f7464ac4365f1be2d900e2dc2121e24a6dc239e8991 /usr/local/bin/semver" | sha256sum --check
+          chmod +x /usr/local/bin/semver
+          NEWVER=$(/usr/local/bin/semver bump patch $(grep 'version:' charts/${{ github.event.client_payload.chart_name }}/Chart.yaml | awk -F' ' '{print $2}'))
           echo "NEW_CHART_VERS=$NEWVER" >> "$GITHUB_OUTPUT"
       - name: Update chart release version
         uses: mikefarah/yq@v4.22.1
