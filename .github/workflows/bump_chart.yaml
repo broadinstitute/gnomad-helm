@@ -1,0 +1,55 @@
+name: bump-chart
+
+on:
+  repository_dispatch:
+    types:
+      - bump-chart
+
+jobs:
+  verify-connection:
+    runs-on: ubuntu-latest
+    steps:
+      - name: show appVersion
+        id: echo
+        run: echo ${{ github.event.client_payload.appversion }}
+      - name: checkout repo
+        uses: actions/checkout@v2
+      - name: Update appVersion in target chart
+        uses: mikefarah/yq@v4.22.1
+        with:
+          cmd: >
+            yq -i '.appVersion = "${{ github.event.client_payload.appversion }}"
+            | .appVersion = "!!str"
+            | .appVersion style="double"'
+            'charts/${{ github.event.client_payload.chart_name }}/Chart.yaml'
+      - name: get new chart release version
+        id: new-chart-vers
+        run: |
+          set -eo pipefail
+          curl -L -O https://raw.githubusercontent.com/fsaintjacques/semver-tool/3.4.0/src/semver
+          echo "1ff4a97e4d1e389f6f034f7464ac4365f1be2d900e2dc2121e24a6dc239e8992 semver" | sha256sum --check
+          chmod +x ./semver
+          NEWVER=$(semver bump patch $(grep 'version:' charts/${{ github.event.client_payload.chart_name }}/Chart.yaml | awk -F' ' '{print $2}'))
+          echo "NEW_CHART_VERS=$NEWVER" >> "$GITHUB_OUTPUT"
+      - name: Update chart release version
+        uses: mikefarah/yq@v4.22.1
+        with:
+          cmd: >
+            yq -i '.version = "${{ steps.new-chart-vers.outputs.NEW_CHART_VERS }}"
+            | .version = "!!str"
+            | .version style="double"'
+            'charts/${{ github.event.client_payload.chart_name }}/Chart.yaml'
+      - name: Create Pull Request
+        id: createpr
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: Update ${{ github.event.client_payload.chart_name }} chart
+          committer: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          labels: automation
+          title: "Update ${{ github.event.client_payload.chart_name }} chart to version ${{ github.event.client_payload.appversion }}/${{ steps.new-chart-vers.outputs.NEW_CHART_VERS }}"
+      - name: Check outputs
+        run: |
+          echo "Pull Request Number - ${{ steps.createpr.outputs.pull-request-number }}"
+          echo "Pull Request URL - ${{ steps.createpr.outputs.pull-request-url }}"
