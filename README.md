@@ -28,7 +28,11 @@ helm-docs
 
 ### Testing
 
-For charts that have tests, you need to have the [chart-testing](https://github.com/helm/chart-testing) and [KinD](https://github.com/kubernetes-sigs/kind) tools installed to run them locally.
+For charts that have tests, you need to have the following in order to run the tests:
+  - [chart-testing](https://github.com/helm/chart-testing) and its dependencies:
+    - [Yamllint](https://github.com/adrienverge/yamllint)
+    - [Yamale](https://github.com/23andMe/Yamale)
+  - [KinD](https://github.com/kubernetes-sigs/kind) tools installed to run them locally.
 
 ```bash
 # create a kubernetes-in-docker cluster, and make sure it is your current kubectl context
