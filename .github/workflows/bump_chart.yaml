@@ -6,7 +6,7 @@ on:
       - bump-chart
 
 jobs:
-  verify-connection:
+  bump-and-update-chart:
     runs-on: ubuntu-latest
     steps:
       - name: show appVersion
