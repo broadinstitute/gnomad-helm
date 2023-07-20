@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gnomad-blog.fullname" . }}
+  labels:
+    {{- include "gnomad-blog.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "gnomad-blog.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "gnomad-blog.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: web
+          image: "gcr.io/exac-gnomad/gnomad-blog:{{ .Values.images.webImage.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PROXY_IPS
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "gnomad-blog.fullname" . }}
+                  key: ips
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 30
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        {{- if eq .Values.integration_test false }}
+        - name: auth
+          image: "gcr.io/exac-gnomad/gnomad-blog-auth:{{ .Values.images.authImage.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: OAUTH_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "gnomad-blog.fullname" . }}-oauth-secrets
+                  key: client-id
+            - name: OAUTH_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "gnomad-blog.fullname" . }}-oauth-secrets
+                  key: client-secret
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
