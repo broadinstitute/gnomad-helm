@@ -1,0 +1,52 @@
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "exome-results-browsers.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "exome-results-browsers.labels" . | nindent 4 }}
+  annotations:
+    ingress.gcp.kubernetes.io/managed-certificates: {{ $fullName }}
+    networking.gke.io/v1beta1.FrontendConfig: {{ $fullName }}
+    kubernetes.io/ingress.global-static-ip-name: {{ .Values.ingress.gcp_static_ip.name }}
+  {{- with .Values.ingress.annotations }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  rules:
+    {{- range .Values.ingress.hosts }}
+    - host: {{ .host | quote }}
+      http:
+        paths:
+          {{- range .paths }}
+          - backend:
+              service:
+                name: {{ $fullName }}
+                port:
+                  number: {{ $svcPort }}
+            pathType: {{ .pathType }}
+          {{- end }}
+    {{- end }}
+{{- if eq .Values.integration_test false  }}
+---
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+  name: {{ $fullName }}
+spec:
+  redirectToHttps:
+    enabled: true
+---
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: {{ $fullName }}
+spec:
+  domains:
+  {{- range .Values.ingress.hosts }}
+    - {{ .host | quote }}
+  {{- end }}
+{{- end }}
+{{- end }}

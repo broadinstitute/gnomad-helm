@@ -1,0 +1,72 @@
+# Default values for exome-results-browsers.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: gcr.io/exac-gnomad/exome-results-browsers
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: ""
+  gcp_static_ip:
+    name: prod-exome-results-browsers-ip
+    address: 34.117.2.147
+  annotations:
+    ingress.gcp.kubernetes.io/pre-shared-cert: exome-results-browsers-cert
+    networking.gke.io/v1beta1.FrontendConfig: exome-results-browsers-frontend-config
+  hosts:
+    - host: asc.broadinstitute.org
+      paths:
+        - pathType: ImplementationSpecific
+    - host: bipex.broadinstitute.org
+      paths:
+        - pathType: ImplementationSpecific
+    - host: epi25.broadinstitute.org
+      paths:
+        - pathType: ImplementationSpecific
+    - host: schema.broadinstitute.org
+      paths:
+        - pathType: ImplementationSpecific
+
+resources:
+  {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector:
+
+tolerations: []
+
+affinity: {}
+
+results_data_disk:
+  mountpoint: /mnt/disks/erb-data
+  directory: results
+  pdName: exome-results-browsers-data-230123-1052-east1c
+
+env:
+  trust_proxy: 2
+
+integration_test: false
