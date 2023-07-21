@@ -12,6 +12,6 @@ spec:
     - name: curl
       image: curlimages/curl:latest
       command: ['curl']
-      args: ['--header', 'Host: {{ .host }}', '--fail-with-body', '{{ include "exome-results-browsers.fullname" . }}:{{ .Values.service.port }}']
+      args: ['--header', 'Host: {{ .host }}', '--fail-with-body', '{{ include "exome-results-browsers.fullname" $ }}:{{ $.Values.service.port }}']
     {{- end }}
   restartPolicy: Never
