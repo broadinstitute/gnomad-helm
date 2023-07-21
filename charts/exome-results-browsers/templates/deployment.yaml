@@ -26,7 +26,7 @@ spec:
             - name: RESULTS_DATA_DIRECTORY
               value: {{ .Values.results_data_disk.mountpoint }}/{{ .Values.results_data_disk.directory }}
             - name: TRUST_PROXY
-              value: {{ .Values.env.trust_proxy }}
+              value: {{ .Values.env.trust_proxy | quote }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
@@ -37,6 +37,7 @@ spec:
               port: http
             initialDelaySeconds: 5
             periodSeconds: 30
+          {{- if eq .Values.integration_test false }}
           volumeMounts:
             - name: data
               mountPath: {{ .Values.results_data_disk.mountpoint }}
@@ -46,6 +47,7 @@ spec:
                 fsType: ext4
                 pdName: {{ .Values.results_data_disk.pdName }}
                 readOnly: true
+          {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- if eq .Values.integration_test false }}
